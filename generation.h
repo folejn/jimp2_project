@@ -5,14 +5,14 @@
 // program przechowuje liste generacji, na podstawie biezacej gener 
 typedef struct gener
 {
-	int r, c;	// ilosc wierszy i kolumn
-	char **cont;	// zawartosc macierzy
-	gener *next;
-}gener;
+    int r, c;	// ilosc wierszy i kolumn
+    int **cont;	// zawartosc macierzy
+    int **next;
+}gener_t;
 
-gener *newGen(gener *list, int r, int c);
-void printGen(gener *g);	// wyswietla generacje na stdout
-void fprintGen(gener *g);	// wypisuje generacje do piku (na razie proponuje txt)
-void freeGen(gener *g);		// uwalnia pamiec
+gener_t *readToGen(char *in); //wpisuje dane z pliku zrodlowego
+void printGen(gener_t *g);	// wyswietla generacje na stdout
+void fPrintGen(gener_t *g, char *out);	// wypisuje generacje do piku (na razie proponuje txt)
+void freeGen(gener_t *g);		// uwalnia pamiec
 
 #endif
