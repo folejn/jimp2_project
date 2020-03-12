@@ -10,9 +10,10 @@ typedef struct gener
     int **next;
 }gener_t;
 
-gener_t *readToGen(char *in); //wpisuje dane z pliku zrodlowego
+gener_t *readToGen(FILE *fin); //wpisuje dane z pliku zrodlowego
+//gener_t *readToGenTxt(FILE *fin); //wpisuje dane z pliku zrodlowego
 void printGen(gener_t *g);	// wyswietla generacje na stdout
-void fPrintGen(gener_t *g, char *out);	// wypisuje generacje do piku (na razie proponuje txt)
+void fPrintGen(gener_t *g, FILE *f_out);	// wypisuje generacje do piku (na razie proponuje txt)
 void freeGen(gener_t *g);		// uwalnia pamiec
 
 #endif

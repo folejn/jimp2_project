@@ -3,7 +3,7 @@
 int isInFrame(int r, int c, gener_t *g)
 {
 	int rg = g->r, cg = g->c;
-	if(r >= 0 && r < rg && c >= 0 && c < cg)
+	if((r >= 0 && r < rg) && (c >= 0 && c < cg))
 		return 1;
 	return 0; 
 }
