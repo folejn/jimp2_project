@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#define BUFFERSIZE 1000
+#include <ctype.h>
 
 #include "generation.h"
 
@@ -20,49 +19,33 @@ gener_t *newGen(int r, int c){
     return g;
 }
 
-gener_t *readToGen(FILE *fin){
-    gener_t *g = NULL;
-  
-    if(fin != NULL){
-        int r, c;
-        fscanf(fin, "%d %d", &r, &c);
-        g = newGen(r, c);
-        if(g != NULL) {
-            for (int i = 0; i < g->r; i++) {
-                for (int j = 0; j < g->c; j++) {
-                    fscanf(fin, "%d", &(g->cont[i][j]));
-                }
-            }
-        }
+gener_t *readToGenTxt(FILE *fin)
+{
+        gener_t *g = NULL;
 
-    }
-    return g;
+        if(fin != NULL)
+        {
+                int r = 0, c = 0;
+   	        char tmp;
+   	        while(fscanf(fin, "%c", &tmp) != EOF)
+    		{
+		        if(tmp == '\n')
+		             r++;
+		        if(isdigit(tmp))
+		             c++;
+	        }
+	        c /= r;
+                g = newGen(r,c);
+		rewind(fin);
+                if(g != NULL) {
+                        for (int i = 0; i < g->r; i++)
+                                for (int j = 0; j < g->c; j++)
+                                        fscanf(fin, "%d", &(g->cont[i][j]));
+                }
+        }
+        return g;
 }
 
-/*gener_t *readToGenTxt(FILE *fin)
-{
-	char buffer[BUFFERSIZE];
-	gener_t *g = NULL;
-
-    	if(fin != NULL)
-	{
-		int r=0, c=0;
-		while(fgets(buffer,BUFFERSIZE,fin) != NULL)
-		{
-			c= strlen(buffer)-1;
-			r++;
-		}
-		g = newGen(r, c);
-		//printf("%d %d\n", r, c);
-	        if(g != NULL) {
-        		for (int i = 0; i < g->r; i++)
-				for (int j = 0; j < g->c; j++)
-                    			fscanf(fin, "%d", &(g->cont[i][j]));
-        	}
-    }
-	return g;
-							 	
-}*/
 void printGen(gener_t *g){
     if(g != NULL){
         for(int i = 0; i < g->r; i++) {
