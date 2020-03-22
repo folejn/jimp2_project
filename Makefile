@@ -1,15 +1,15 @@
-CFLAGS = -std=c99
+CFLAGS = -c -std=c99
 LIBS = -lpng
 
 all: main.o generation.o comp.o pngfile.o
 	@cc main.o pngfile.o comp.o generation.o $(LIBS) -o main
 	@rm -f *.o
 main.o: main.c comp.h generation.h pngfile.h
-	@cc -c $(CFLAGS) main.c -o main.o 
+	@cc $(CFLAGS) main.c -o main.o 
 
 comp.o: comp.c comp.h generation.h
-	@cc -c $(CFLAGS) comp.c -o comp.o
+	@cc $(CFLAGS) comp.c -o comp.o
 generation.o: generation.c generation.h
-	@cc -c $(CFLAGS) generation.c -o generation.o
+	@cc $(CFLAGS) generation.c -o generation.o
 pngfile.o: pngfile.c pngfile.h
-	@cc -c $(CFLAGS) pngfile.c $(LIBS) -o pngfile.o
+	@cc $(CFLAGS) pngfile.c -o pngfile.o

@@ -8,11 +8,12 @@ void disHelp()
 {
 	printf("Prawidlowe wprowadzenie argumentow: \n");
 	printf("------------------------------------\n");
-	printf("./main [n] [s] filename [a1] [a2] [a3] ... [an]\n");
-	printf("Gdzie: n-ilosc zadanych generacji\n");
-	printf("s = 4 lub s = 8,( 4 dla sasiedzztwa von Neumanna, 8 dla Moorea)\n");
-	printf("filename- nazwa pliku wejsciowego\n");
+	printf("./main N S filename.txt [a1] [a2] [a3] ... [an]\n");
+	printf("Gdzie: N-ilosc zadanych generacji\n");
+	printf("S = 4 lub S = 8,( 4 dla sasiedzztwa von Neumanna, 8 dla Moorea)\n");
+	printf("filename.txt- nazwa pliku wejsciowego\n");
 	printf("a1 - ai -an: numery generacji przekazywanych do plikow png o nazwie out[i].png (opcjonalne)\n");
+	printf("Liczba tych numerow nie moze przekraczac 200!\n");
 	printf("\n----------------------------------\n");
 }
 int main(int argc, char **argv)
@@ -20,7 +21,7 @@ int main(int argc, char **argv)
 	gener_t *g;
 	int s;		//rodzaj sasiedztwa
 	int pr[200]; 	// numery generacjii zapisywanych do plikow
-	char png_out[10];/*bufor na nazwę pliku wyjściowego png (może ich być <0,200>, więc nazwa="out"+ 3cyfry					 + ".png" */	
+	char png_out[30];/*bufor na nazwę pliku wyjściowego png (może ich być <0,200>) nazwa="out"+ 7cyfr					 + ".png" */	
 	
 	if (argc > 204)
 	{
@@ -30,6 +31,8 @@ int main(int argc, char **argv)
 	}
 	if(argc < 2)
 	{
+		if(atoi(argv[1]) < 1)
+			fprintf(stderr,"Liczba generacji musi byc wieksza od 0\n");
 		fprintf(stderr, "Podaj ilosc generacji\n");
 		disHelp();
 		return 1;
@@ -50,7 +53,6 @@ int main(int argc, char **argv)
 
 	s = atoi(argv[2]);
 	FILE *in = argc > 3 ? fopen(argv[3],"rb") : stdin;
-	//FILE *out = fopen("out.png","wb");		//FILE *fp = fopen(file_name, "wb");
 
 	if(!in)
 	{
@@ -58,7 +60,7 @@ int main(int argc, char **argv)
 		return 4;	
 	}	
 	g = readToGenTxt(in);
-	if( g == NULL)
+	if(!g)
 	{
 		fprintf(stderr, "Brak pamieci\n");
 		disHelp();
@@ -107,6 +109,12 @@ int main(int argc, char **argv)
 			}
 		printf("\n \n");
 	}
+	FILE *outTxt = fopen("out.txt","w");	// zapis koncowej generacji do out.txt
+	if(!outTxt)
+		fprintf(stderr,"Blad zapisu do pliku txt\n");
+	else fPrintGen(g,outTxt);
+	
+	fclose(outTxt);
 	fclose(in);
 	freeGen(g);
 	return 0;
