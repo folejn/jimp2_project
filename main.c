@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "generation.h"
 #include "comp.h"
 #include "pngfile.h"
@@ -66,6 +67,7 @@ int main(int argc, char **argv)
 		disHelp();
 		return 3;		
 	}
+	system("clear");
 	printGen(g);
 	printf("\n \n");
 	
@@ -82,24 +84,29 @@ int main(int argc, char **argv)
 					g->next[j][k] = isAlive4(j,k,g);
 				else if (s == 8)
 					g->next[j][k] = isAlive8(j,k,g);
-				else return 2;
+				else {
+					freeGen(g);
+					return 2;
+				}
 			}
 		for(int j=0; j< g->r;j++)
 			for(int k=0; k<g->c; k++)
 				g->cont[j][k] = g->next[j][k];
+		system("clear");
+		printf("Numer generacji: %d\n\n",i+1);
 		printGen(g);
+		sleep(1);
 		
 		for(int j=0; j<argc -4; j++)	// które generacje zostaną zapisane do pliku
 			if(pr[j] == i + 1)	// numery generacji są liczone od 1
 			{
-				strcpy(png_out,"out");				// tworzenie nazwy out[i].png
-				sprintf(png_out +strlen(png_out),"%d",pr[j]);	// nazwa pliku wyjsciowego
-				strcpy(png_out + strlen(png_out), ".png");	//
+				sprintf(png_out,"%s%d%s","out",pr[j],".png");	// nazwa pliku wyjsciowego
 				FILE *out = fopen(png_out,"wb");
 
 				if(!out)
 				{
 					fprintf(stderr, "Blad otwarcia pliku %s\n",png_out);
+					freeGen(g);
 					return 4;
 				}
 				//fPrintGen(g,out);
@@ -107,13 +114,15 @@ int main(int argc, char **argv)
 
 				fclose(out);
 			}
-		printf("\n \n");
 	}
 	FILE *outTxt = fopen("out.txt","w");	// zapis koncowej generacji do out.txt
 	if(!outTxt)
 		fprintf(stderr,"Blad zapisu do pliku txt\n");
-	else fPrintGen(g,outTxt);
-	
+	else 
+	{
+		fPrintGen(g,outTxt);
+		fprintf(stdout,"Koncowa generacja zostala zapisana do pliku %s\n", "out.txt");
+	}
 	fclose(outTxt);
 	fclose(in);
 	freeGen(g);
