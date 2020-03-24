@@ -10,3 +10,6 @@ a1 .. an- (opcjonalnie) numery generacji, które zostaną zapisane w formacie pn
 
 Ostatnia generacja generowana przez program jest zwracana do pliku out.txt
 
+
+plik wejściowy powinien być sformułowany w taki sposób jak glider.txt
+(macierz "0" i "1" przedzielanych spacjami)
